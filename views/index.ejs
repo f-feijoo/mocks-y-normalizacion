@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("templates/head")   %>
+<body>
+    <div class="container mt-5">
+        <form onsubmit="return addInfo()">
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" for="title">Titulo</label>
+                    <input class="form-control" type="text" name="title" placeholder="Title" id="title">
+                </div>
+                <div class="col">
+                    <label class="form-label" for="price">Precio</label>
+                    <input class="form-control" type="number" name="price" placeholder="Price" id="price">
+                </div>
+                <div class="col">
+                    <label class="form-label" for="img">Imagen</label>
+                    <input class="form-control" type="text" name="thumbnail" placeholder="Thumbnail" id="img">
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-success">Guardar</button>    
+        </form>
+    </div>
+    <div class="container mt-5">
+        <table class="table table-success table-striped table-hover">
+            <thead>
+                <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Imagen</th>
+                </tr>
+            </thead>
+            <tbody class="overflow-auto" id="caja">
+            </tbody>
+        </table>
+    </div>
+    <div class="container mt-5 border border-dark rounded">
+        <h1 class="text-center">Centro de mensajes</h1>
+        <br>
+        <form onsubmit="return addMessage()">
+            <label class="form-label p-2" for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email" required>
+            <br>
+            <div id="c-mensajes" class="bg-secondary overflow-auto" style="--bs-bg-opacity: .5; max-height: 250px;"></div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" for="texto">Mensaje</label>
+                    <input type="text" name="text" id="text" placeholder="Mensaje" required>
+                    <button type="submit" class="btn btn-primary p-2 m-2">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+    <br>
+</body>
+</html>
