@@ -4,6 +4,8 @@ const productos = require("./routes/productos.js");
 const http = require("http");
 const { knexMySql } = require("./db/db.js");
 const Mensaje = require("./models/Mensajes");
+const { normalize, schema } = require("normalizr");
+const { inspect } = require('util')
 
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +21,18 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", productos);
+
+const authorSchema = new schema.Entity('author', {}, {idAttribute: 'user'})
+
+const authors = new schema.Array(authorSchema)
+
+// const msSchema = new schema.Entity('ms')
+
+// const mensajesSchema = new schema.Entity('mensajes', {
+//   users: [authorSchema],
+//   ms: [msSchema]
+// })
+
 
 const PORT = process.env.PORT || 8080;
 
@@ -64,7 +78,13 @@ io.on("connection", (socket) => {
     } catch {}
   };
   getAll().then((resp) => {
-    socket.emit("mensajes", resp);
+    
+    const mensajesNormalized = normalize(resp, authors)
+    function print(objeto){
+      console.log(inspect(objeto,false,12,true))
+    }
+  print( mensajesNormalized)
+    socket.emit("mensajes", mensajesNormalized);
   });
 
   socket.on("Msn", (x) => {
