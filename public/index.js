@@ -5,7 +5,6 @@ socket.on("productos", (data) => {
 });
 
 socket.on("mensajes", (data) => {
-  console.log(data);
   renderMs(data);
 });
 
@@ -43,8 +42,15 @@ document.addEventListener("submit", (e) => {
 
 const addMessage = () => {
   let msObj = {
-    user: document.querySelector("#email").value,
-    ms: document.querySelector("#text").value,
+    autor: {
+      id: document.querySelector("#email").value,
+      nombre: document.querySelector("#nombre").value,
+      apellido: document.querySelector("#apellido").value,
+      edad: document.querySelector("#edad").value,
+      alias: document.querySelector("#alias").value,
+      avatar: document.querySelector("#avatar").value
+    },
+    texto: document.querySelector("#text").value,
   };
   document.querySelector("#text").value = "";
   socket.emit("Msn", msObj);
@@ -52,11 +58,28 @@ const addMessage = () => {
 };
 
 const renderMs = (data) => {
-  let html = data
-    .map((x) => {
+
+  const autorSchema = new normalizr.schema.Entity('autores')
+
+  const mensajeSchema = new normalizr.schema.Entity('mensajes', {
+    id: {type: String},
+    autor: autorSchema,
+    texto: '',
+    timestamp: {type: String}
+  })
+  
+  const chatSchema = new normalizr.schema.Entity('chats', {
+    id: { type: String },
+    nombre: '',
+    mensajes: [mensajeSchema]
+  });
+
+  const denormalizedData = normalizr.denormalize(data.result, chatSchema, data.entities)
+  console.log(denormalizedData)
+  let html = denormalizedData.map((x) => {
       return `
         <div>
-            <p style="color: brown;"><strong class="text-primary">${x.user}</strong> [${x.time}] <i class="text-success">${x.ms}</i></p>
+            <p style="color: brown;"><strong class="text-primary">${x.autor.alias}</strong> [${x.timestamp}] <i class="text-success">${x.texto}</i></p>
         </div>
         `;
     })

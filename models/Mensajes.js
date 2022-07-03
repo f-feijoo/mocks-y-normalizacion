@@ -1,14 +1,35 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
 
 const mensajeSchema = new Schema({
-    user: {
-        type:String,
-        required: true
+  id: {
+    type: Number,
+  },
+  autor: {
+    id: {
+      type: String,
     },
-    ms: {type: String},
-    time: {
-        type: String,
-    }
-})
+    nombre: {
+      type: String,
+    },
+    apellido: {
+      type: String,
+    },
+    edad: {
+      type: Number,
+    },
+    alias: {
+      type: String,
+    },
+    avatar: {
+      type: String,
+    },
+  },
+  texto: {
+    type: String,
+  },
+  timestamp: {
+    type: String,
+  },
+});
 
-module.exports = model('mensajes', mensajeSchema)
+module.exports = model("mensajes", mensajeSchema);

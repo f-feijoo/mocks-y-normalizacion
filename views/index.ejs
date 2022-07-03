@@ -40,14 +40,29 @@
         <h1 class="text-center">Centro de mensajes</h1>
         <br>
         <form onsubmit="return addMessage()">
-            <label class="form-label p-2" for="email">Email</label>
             <input type="email" name="email" id="email" placeholder="Email" required>
+            <br>
+            <br>
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre" required>
+            <br>
+            <br>
+            <input type="text" name="apellido" id="apellido" placeholder="Apellido" required>
+            <br>    
+            <br>        
+            <input type="number" name="edad" id="edad" placeholder="Edad" required>
+            <br>     
+            <br>       
+            <input type="text" name="alias" id="alias" placeholder="Alias" required>
+            <br>  
+            <br>          
+            <input type="text" name="Avatar" id="avatar" placeholder="Avatar" required>
+            <br>
             <br>
             <div id="c-mensajes" class="bg-secondary overflow-auto" style="--bs-bg-opacity: .5; max-height: 250px;"></div>
             <br>
+            <br>
             <div class="row">
-                <div class="col">
-                    <label class="form-label" for="texto">Mensaje</label>
+                <div class="col">            
                     <input type="text" name="text" id="text" placeholder="Mensaje" required>
                     <button type="submit" class="btn btn-primary p-2 m-2">Enviar</button>
                 </div>

@@ -22,16 +22,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", productos);
 
-const authorSchema = new schema.Entity('author', {}, {idAttribute: 'user'})
+const autorSchema = new schema.Entity('autores')
 
-const authors = new schema.Array(authorSchema)
+const mensajeSchema = new schema.Entity('mensajes', {
+  id: {type: String},
+  autor: autorSchema,
+  texto: '',
+  timestamp: {type: String}
+})
 
-// const msSchema = new schema.Entity('ms')
-
-// const mensajesSchema = new schema.Entity('mensajes', {
-//   users: [authorSchema],
-//   ms: [msSchema]
-// })
+const chatSchema = new schema.Entity('chats', {
+  id: { type: String },
+  nombre: '',
+  mensajes: [mensajeSchema]
+});
 
 
 const PORT = process.env.PORT || 8080;
@@ -78,26 +82,37 @@ io.on("connection", (socket) => {
     } catch {}
   };
   getAll().then((resp) => {
-    
-    const mensajesNormalized = normalize(resp, authors)
+    const chat = {
+      id: `${Math.floor(Math.random() * 1000)}`,
+      nombre: 'Centro de Mensajes',
+      mensajes: resp
+    }
+    const mensajesNormalized = normalize(chat, chatSchema)
     function print(objeto){
       console.log(inspect(objeto,false,12,true))
     }
-  print( mensajesNormalized)
+  // print(mensajesNormalized)
     socket.emit("mensajes", mensajesNormalized);
   });
 
   socket.on("Msn", (x) => {
-    const { user, ms } = x;
+    const { autor, texto } = x;
     let newMen = {
-      user: user,
-      time: moment().format("DD/MM/YYYY hh:mm:ss"),
-      ms: ms,
+      id: `${Math.floor(Math.random() * 1000)}`,
+      autor: autor,
+      texto: texto,
+      timestamp: moment().format('DD/MM/YYYY hh:mm:ss')
     };
     const saveMen = async (ms) => {
       let doc = Mensaje.create(ms);
       getAll().then((resp) => {
-        io.sockets.emit("mensajes", resp);
+        const chat = {
+          id: `${Math.floor(Math.random() * 1000)}`,
+          nombre: 'Centro de Mensajes',
+          mensajes: resp
+        }
+        const mensajesNormalized = normalize(chat, chatSchema)
+        io.sockets.emit("mensajes", mensajesNormalized);
       });
     };
     saveMen(newMen);
